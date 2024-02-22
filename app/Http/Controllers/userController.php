@@ -72,4 +72,43 @@ class userController extends Controller
         return response()->json(['message' => 'utilisateur supprimer avec success']);
     }
 
+
+    public function update(Request $request, $id)
+    {
+
+    
+
+        // Trouver l'utilisateur que vous souhaitez mettre à jour
+        $user = User::findOrFail($id);
+
+        // Mettre à jour les champs avec les nouvelles valeurs
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->role = $request->input('role');
+        $user->addresse = $request->input('addresse');
+        $user->num_phone = $request->input('num_phone');
+        /* $user->nom_agence = $request->input('nom_agence'); */
+
+        // Mettre à jour le mot de passe si un nouveau mot de passe est fourni
+        if ($request->has('password')) {
+            $user->password = Hash::make($request->input('password'));
+        }
+
+        // Mettre à jour l'image si une nouvelle image est fournie
+        if ($request->hasFile('image')) {
+            // Supprimer l'ancienne image si elle existe
+            // Storage::delete($user->image);
+
+            // Enregistrer la nouvelle image
+            $user->image = $request->file('image')->store('img');
+        }
+
+        // Enregistrer les modifications dans la base de données
+        $user->save();
+
+        // Retourner l'utilisateur mis à jour
+        return $user;
+    }
+
+    // ...
 }
