@@ -11,19 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('role');
-            $table->string('password');
-            $table->string('addresse');
-            $table->string('num_phone');
-            $table->string('image')->nullable();
+        Schema::create('abonnements', function (Blueprint $table) {
+            $table->id('id_abonnement');
             $table->string('nom_agence')->nullable();
-            $table->rememberToken();
+            $table->date('date_debut');
+            $table->date('date_fin');
+            $table->boolean('statut');
+            $table->unsignedBigInteger('id_user')->nullable();
+            $table->foreign('id_user')->references('id_user')->on('user');
             $table->timestamps();
         });
+        
     }
 
     /**
