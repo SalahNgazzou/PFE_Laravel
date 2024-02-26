@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\Abonnement;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -24,8 +24,15 @@ class userController extends Controller
         if ($request->file('image') != null) {
             $user->image = $request->file("image")->store("img");
         }
+        if($request->input("role")=="Utilisateur externe"){
+            $abonn= new Abonnement();
+            $abonn->nom_agence = $request->input("nom_agence");
+            $abonn->date_debut = $request->input("dataDebut");
+            $abonn->date_fin = $request->input("dataFin");
+            $abonn->statut = 1;
+            $abonn->save();
 
-        $user->nom_agence = $request->input("nom_agence");
+        }
         $user->save();
         return $user;
     }
