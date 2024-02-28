@@ -6,7 +6,7 @@ use App\Models\Abonnement;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -24,16 +24,19 @@ class userController extends Controller
         if ($request->file('image') != null) {
             $user->image = $request->file("image")->store("img");
         }
-        if($request->input("role")=="Utilisateur externe"){
-            $abonn= new Abonnement();
-            $abonn->nom_agence = $request->input("nom_agence");
-            $abonn->date_debut = $request->input("dataDebut");
-            $abonn->date_fin = $request->input("dataFin");
-            $abonn->statut = 1;
-            $abonn->save();
-
-        }
         $user->save();
+
+        if ($request->input("role") == "Utilisateur externe") {
+
+            $abonn = new Abonnement();
+            $abonn->id_user = $user->id;
+            $abonn->nom_agence = $request->input("nom_agence");
+            $abonn->date_debut = $request->input("date_debut");
+            $abonn->date_fin = $request->input("date_fin");
+            $abonn->statut = true;
+            $abonn->save();
+        }
+
         return $user;
     }
     function login(Request $request)
@@ -79,4 +82,30 @@ class userController extends Controller
         return response()->json(['message' => 'utilisateur supprimer avec success']);
     }
 
+
+    public function edit($id)
+    {
+        // Trouver l'utilisateur que vous souhaitez mettre à jour
+        $user = User::find($id);
+        // Retourner l'utilisateur mis à jour
+        return $user;
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
+        }
+
+        // Mettre à jour les attributs de l'utilisateur avec les données du formulaire
+        $user->name = $request->input("name");
+        $user->email = $request->input("email");
+        $user->role = $request->input("role");
+        $user->addresse = $request->input("addresse");
+        $user->num_phone = $request->input("num_phone");
+        $user->save();
+        return $user;
+    }
 }

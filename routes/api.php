@@ -21,4 +21,5 @@ Route:: post('ajouter',[userController::class,'ajouter']);
 Route:: post('login',[userController::class,'login']);
 Route:: get('liste',[userController::class,'liste']);
 Route::delete('/liste/{id}',[userController::class,'destroy']);
-
+Route::get('/edit/{id}',[userController::class,'edit']);
+Route::put('/update/{id}', [UserController::class, 'update']);

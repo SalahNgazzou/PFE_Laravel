@@ -9,6 +9,12 @@ class Abonnement extends Model
 {
     use HasFactory;
     protected $table = 'abonnements';
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class , 'id_user');
+    }
+    protected $primaryKey="id";
     protected $fillable = [
         'nom_agence',
         'date_debut',
@@ -16,4 +22,5 @@ class Abonnement extends Model
         'statut',
         'id_user',
     ];
+    
 }
