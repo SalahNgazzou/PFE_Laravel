@@ -33,7 +33,7 @@ class userController extends Controller
             $abonn->nom_agence = $request->input("nom_agence");
             $abonn->date_debut = $request->input("date_debut");
             $abonn->date_fin = $request->input("date_fin");
-            $abonn->statut = true;
+            $abonn->statut;
             $abonn->save();
         }
 
@@ -41,13 +41,19 @@ class userController extends Controller
     }
     function login(Request $request)
     {
-        $user = User::where("email", $request->email)->first();
 
+        $user = User::where("email", $request->email)->first();
+        if ($user->role == "Utilisateur externe") {
+            $abonn = Abonnement::where( "id_user",$user->id)-> get();
+
+        }
         // Check if the user exists and if the password matches
         if (!$user || !Hash::check($request->password, $user->password)) {
             // If the user doesn't exist or the password doesn't match, return an error message
             return ["error" => "password or email is not matched"];
         }
+
+
 
         // If the user exists and the password matches, generate an access token
         $token = $user->createToken('MyAppToken');
@@ -55,14 +61,18 @@ class userController extends Controller
         // Return the user object along with the access token
         return [
             'user' => $user,
+             'abonnements' => $abonn,
             'access_token' => $token->accessToken,
         ];
 
     }
     function liste()
     {
-        return User::all();
+        $user = User::all();
+        return $user;
     }
+   
+
     // ProductController.php
 
     public function destroy($id)
