@@ -19,7 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route:: post('ajouter',[userController::class,'ajouter']);
 Route:: post('login',[userController::class,'login']);
-Route:: get('liste',[userController::class,'liste'])->middleware(['auth:api','scope:r2']);
 Route::delete('/liste/{id}',[userController::class,'destroy']);
+Route::group(['prefix' =>'user'], function(){
+
+Route:: get('liste',function(){
+    return "sddsgsdgs";
+})->middleware(['scope:r1']);});
 
 //->middleware(['auth:api','scope:employe']);
