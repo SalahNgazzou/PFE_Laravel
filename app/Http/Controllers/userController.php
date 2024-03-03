@@ -47,7 +47,7 @@ class userController extends Controller
         }
 
         // If the user exists and the password matches, generate an access token
-        $token = $user->createToken('Token name',["r1"]);
+        $token = $user->createToken('Token name',["user"]);
         // Return the user object along with the access token
         return [
             'user' => $user,

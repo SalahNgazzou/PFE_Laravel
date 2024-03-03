@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('date_debut');
             $table->string('date_fin');
             $table->boolean('statut');
-            $table->unsignedBigInteger('id_user')->nullable();
-            $table->foreign('id_user')->references('id_user')->on('user');
+            $table->unsignedBigInteger('id')->nullable();
+            $table->foreign('id')->references('id')->on('users');
             $table->timestamps();
         });
     }
