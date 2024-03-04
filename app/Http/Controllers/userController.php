@@ -25,28 +25,12 @@ class userController extends Controller
             $user->image = $request->file("image")->store("img");
         }
         $user->save();
-
-        if ($request->input("role") == "Utilisateur externe") {
-
-            $abonn = new Abonnement();
-            $abonn->id_user = $user->id;
-            $abonn->nom_agence = $request->input("nom_agence");
-            $abonn->date_debut = $request->input("date_debut");
-            $abonn->date_fin = $request->input("date_fin");
-            $abonn->statut;
-            $abonn->save();
-        }
-
         return $user;
     }
     function login(Request $request)
     {
 
         $user = User::where("email", $request->email)->first();
-        if ($user->role == "Utilisateur externe") {
-            $abonn = Abonnement::where( "id_user",$user->id)-> get();
-
-        }
         // Check if the user exists and if the password matches
         if (!$user || !Hash::check($request->password, $user->password)) {
             // If the user doesn't exist or the password doesn't match, return an error message
@@ -61,7 +45,6 @@ class userController extends Controller
         // Return the user object along with the access token
         return [
             'user' => $user,
-             'abonnements' => $abonn,
             'access_token' => $token->accessToken,
         ];
 
