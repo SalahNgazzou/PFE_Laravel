@@ -13,12 +13,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $table = 'user';
+    protected $table = 'users';
 
-    public function abonnemnts()
-    {
-        return $this->hasOne(Abonnement::class);
-    }
+   
 
     protected $primaryKey = 'id';
     protected $fillable = [
