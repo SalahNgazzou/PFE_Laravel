@@ -20,9 +20,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('login', [userController::class, 'login']);
 Route::prefix('users')->group(function () {
-    Route::post('ajouter', [userController::class, 'ajouter']);
-    Route::get('liste', [userController::class, 'liste']);
-    Route::delete('/liste/{id}', [userController::class, 'destroy']);
-    Route::get('/edit/{id}', [userController::class, 'edit']);
-    Route::put('/update/{id}', [UserController::class, 'update']);
+    Route::post('ajouter', [userController::class, 'ajouter'])->middleware(['auth:api','scope:Admin']);
+    Route::get('liste', [userController::class, 'liste'])->middleware(['auth:api','scope:Admin']);
+    Route::delete('/liste/{id}', [userController::class, 'destroy'])->middleware(['auth:api','scope:Admin']);
+    Route::get('/edit/{id}', [userController::class, 'edit'])->middleware(['auth:api','scope:Admin']);
+    Route::put('/update/{id}', [UserController::class, 'update'])->middleware(['auth:api','scope:Admin']);
 });
