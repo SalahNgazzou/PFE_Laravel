@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::post('login', [userController::class, 'login']);
+
 Route::prefix('users')->group(function () {
     Route::post('ajouter', [userController::class, 'ajouter'])->middleware(['auth:api','scope:Admin']);
     Route::get('liste', [userController::class, 'liste'])->middleware(['auth:api','scope:Admin']);
