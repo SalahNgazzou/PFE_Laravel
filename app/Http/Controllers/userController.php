@@ -75,7 +75,7 @@ class userController extends Controller
     }
 
 
-    public function edit($id)
+    public function getUser($id)
     {
         // Trouver l'utilisateur que vous souhaitez mettre à jour
         $user = User::find($id);
