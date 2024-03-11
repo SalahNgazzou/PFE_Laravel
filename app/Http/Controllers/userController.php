@@ -93,11 +93,13 @@ class userController extends Controller
         if (!$user) {
             return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
         }
-
-        // Mettre à jour les attributs de l'utilisateur avec les données du formulaire
         $user->name = $request->input("name");
+        $user->last_name = $request->input("last_name");
+        $user->cin = $request->input("cin");
+        $user->birth = $request->input("birth");
         $user->email = $request->input("email");
         $user->role = $request->input("role");
+        $user->password = Hash::make($request->input("password"));
         $user->addresse = $request->input("addresse");
         $user->num_phone = $request->input("num_phone");
         $user->save();
