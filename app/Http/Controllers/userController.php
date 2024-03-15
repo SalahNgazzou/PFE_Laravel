@@ -24,6 +24,7 @@ class userController extends Controller
         $user->password = Hash::make($request->input("password"));
         $user->addresse = $request->input("addresse");
         $user->num_phone = $request->input("num_phone");
+        $user->statue= $request->input("statue");
         if ($request->file('image') != null) {
             $user->image = $request->file("image")->store("img");
         }
@@ -104,5 +105,16 @@ class userController extends Controller
         $user->num_phone = $request->input("num_phone");
         $user->save();
         return $user;
+    }
+
+    public function ChangeStatus($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Inversion du statut du compte
+        $user->statue = $user->statue === 'Active' ? 'Inactive' : 'Active';
+        $user->save();
+
+        return response()->json(['message' => 'Statut du compte mis à jour avec succès'], 200);
     }
 }

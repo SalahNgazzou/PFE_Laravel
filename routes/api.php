@@ -27,3 +27,4 @@ Route::prefix('users')->group(function () {
     Route::get('/{id}', [userController::class, 'getUser'])->middleware(['auth:api','scope:Admin']);
     Route::put('/{id}', [UserController::class, 'update'])->middleware(['auth:api','scope:Admin']);
 });
+Route::put('/{id}', [UserController::class, 'ChangeStatus']);

@@ -26,6 +26,7 @@ class User extends Authenticatable
         'addresse',
         'num_phone',
         'image',
+        'statue',
     ];
 
    
