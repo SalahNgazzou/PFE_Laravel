@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\bienController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
@@ -21,10 +22,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('login', [userController::class, 'login']);
 
 Route::prefix('users')->group(function () {
-    Route::post('', [userController::class, 'ajouter'])->middleware(['auth:api','scope:Admin']);
-    Route::get('', [userController::class, 'liste'])->middleware(['auth:api','scope:Admin']);
-    Route::delete('/{id}', [userController::class, 'destroy'])->middleware(['auth:api','scope:Admin']);
-    Route::get('/{id}', [userController::class, 'getUser'])->middleware(['auth:api','scope:Admin']);
-    Route::put('/{id}', [UserController::class, 'update'])->middleware(['auth:api','scope:Admin']);
+    Route::post('', [userController::class, 'ajouter']);
+    Route::get('', [userController::class, 'liste'])->middleware(['auth:api', 'scope:Admin']);
+    Route::delete('/{id}', [userController::class, 'destroy'])->middleware(['auth:api', 'scope:Admin']);
+    Route::get('/{id}', [userController::class, 'getUser'])->middleware(['auth:api', 'scope:Admin']);
+    Route::put('/{id}', [UserController::class, 'update'])->middleware(['auth:api', 'scope:Admin']);
+    Route::put('/{id}', [UserController::class, 'ChangeStatus'])->middleware(['auth:api', 'scope:Admin']);
 });
-Route::put('/{id}', [UserController::class, 'ChangeStatus']);
+Route::post('/biens/ajouter', [bienController::class, 'ajouterBien'])->name('biens.ajouter');
