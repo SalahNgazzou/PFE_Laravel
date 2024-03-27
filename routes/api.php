@@ -1,13 +1,19 @@
 <?php
 
+use App\Http\Controllers\AjouterBiens;
+use App\Http\Controllers\ajouterbiensController;
 use App\Http\Controllers\AjouterController;
+use App\Http\Controllers\biensController;
 use App\Http\Controllers\BiensConttroler\AppartementController;
+use App\Http\Controllers\BiensConttroler\DuplexController;
 use App\Http\Controllers\BiensConttroler\EntropotController;
 use App\Http\Controllers\BiensConttroler\ImmeubleController;
 use App\Http\Controllers\BiensConttroler\Local_commercialController;
 use App\Http\Controllers\BiensConttroler\Parking_GarageController;
 use App\Http\Controllers\BiensConttroler\TerrainController;
 use App\Http\Controllers\BiensConttroler\UsineController;
+use App\Http\Controllers\ModifierBiens;
+use App\Http\Controllers\ModifierbiensController;
 use App\Http\Controllers\VillaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -37,12 +43,6 @@ Route::prefix('users')->group(function () {
     Route::put('/{id}', [UserController::class, 'update'])->middleware(['auth:api', 'scope:Admin']);
     Route::put('/{id}', [UserController::class, 'ChangeStatus'])->middleware(['auth:api', 'scope:Admin']);
 });
-Route::post('/Villa/ajouter', [VillaController::class, 'ajouterVilla'])->name('Villa.ajouter');
-Route::post('/appartement/ajouter', [AppartementController::class, 'ajouterAppartement'])->name('appartement.ajouter');
-Route::post('/duplex/ajouter', [AppartementController::class, 'ajouterDuplex'])->name('duplex.ajouter');
-Route::post('/terrain/ajouter', [TerrainController::class, 'ajouterTerrain'])->name('terrain.ajouter');
-Route::post('/parking_garage/ajouter', [Parking_GarageController::class, 'ajouterParking'])->name('parking_garage.ajouter');
-Route::post('/immeuble/ajouter', [ImmeubleController::class, 'ajouterImmeuble'])->name('immeuble.ajouter');
-Route::post('/usine/ajouter', [UsineController::class, 'ajouterUsine'])->name('usine.ajouter');
-Route::post('/entropot/ajouter', [EntropotController::class, 'ajouterEntropot'])->name('entropot.ajouter');
-Route::post('/local_commercial/ajouter', [Local_commercialController::class, 'ajouterLocalCommercial'])->name('local_commercial.ajouter');
+Route::post('/biens/ajouter', [ajouterbiensController::class, 'AjouterBiens'])->name('biens.ajouter');
+Route::put('/biens/modifier/{id}', [modifierbiensController::class, 'ModifierBiens'])->name('biens.modifier');
+Route::get('getbiens', [biensController::class, 'listebiens']);

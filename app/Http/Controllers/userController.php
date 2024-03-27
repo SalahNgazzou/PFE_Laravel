@@ -16,6 +16,7 @@ class userController extends Controller
     {
         $user = new User();
         $user->name = $request->input("name");
+        
         $user->last_name = $request->input("last_name");
         $user->cin = $request->input("cin");
         $user->birth = $request->input("birth");

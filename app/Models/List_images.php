@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Images_immeuble extends Model
+class List_images extends Model
 {
     use HasFactory;
 
-    protected $table = 'images_immeuble';
+    protected $table = 'list_images';
 
     protected $primaryKey = 'id';
     protected $fillable = [
@@ -17,8 +17,8 @@ class Images_immeuble extends Model
         'src',
     ];
 
-    public function immeuble()
+    public function biens()
     {
-        return $this->belongsTo(Immeuble::class);
+        return $this->belongsTo(Biens::class);
     }
 }
