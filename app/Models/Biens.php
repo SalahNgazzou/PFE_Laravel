@@ -23,7 +23,7 @@ class Biens extends Model
         'etat',
         'addresse',
         'ville',
-        'couvernant',
+        'gouvernant',
         'prix',
         'surface',
         'nbr_chombre',

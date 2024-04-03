@@ -40,9 +40,14 @@ Route::prefix('users')->group(function () {
     Route::get('', [userController::class, 'liste'])->middleware(['auth:api', 'scope:Admin']);
     Route::delete('/{id}', [userController::class, 'destroy'])->middleware(['auth:api', 'scope:Admin']);
     Route::get('/{id}', [userController::class, 'getUser'])->middleware(['auth:api', 'scope:Admin']);
-    Route::put('/{id}', [UserController::class, 'update'])->middleware(['auth:api', 'scope:Admin']);
+    Route::put('update/{id}', [UserController::class, 'update']);
     Route::put('/{id}', [UserController::class, 'ChangeStatus'])->middleware(['auth:api', 'scope:Admin']);
 });
-Route::post('/biens/ajouter', [ajouterbiensController::class, 'AjouterBiens'])->name('biens.ajouter');
-Route::put('/biens/modifier/{id}', [modifierbiensController::class, 'ModifierBiens'])->name('biens.modifier');
+
+
+Route::prefix('coutiers')->group(function () {
+    Route::post('', [ajouterbiensController::class, 'add_Biens']);
+
+});
+
 Route::get('getbiens', [biensController::class, 'listebiens']);

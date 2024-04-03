@@ -16,7 +16,7 @@ class userController extends Controller
     {
         $user = new User();
         $user->name = $request->input("name");
-        
+
         $user->last_name = $request->input("last_name");
         $user->cin = $request->input("cin");
         $user->birth = $request->input("birth");
@@ -25,7 +25,7 @@ class userController extends Controller
         $user->password = Hash::make($request->input("password"));
         $user->addresse = $request->input("addresse");
         $user->num_phone = $request->input("num_phone");
-        $user->statue= $request->input("statue");
+        $user->statue = $request->input("statue");
         if ($request->file('image') != null) {
             $user->image = $request->file("image")->store("img");
         }
@@ -45,7 +45,7 @@ class userController extends Controller
 
 
         // If the user exists and the password matches, generate an access token
-        $token = $user->createToken('Token name',[$user->role]);
+        $token = $user->createToken('Token name', [$user->role]);
         // Return the user object along with the access token
         return [
             'user' => $user,
@@ -58,7 +58,7 @@ class userController extends Controller
         $user = User::all();
         return $user;
     }
-   
+
 
     // ProductController.php
 
@@ -92,9 +92,9 @@ class userController extends Controller
     {
         $user = User::find($id);
 
-        if (!$user) {
+     /*    if (!$user) {
             return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
-        }
+        } */
         $user->name = $request->input("name");
         $user->last_name = $request->input("last_name");
         $user->cin = $request->input("cin");
@@ -104,6 +104,19 @@ class userController extends Controller
         $user->password = Hash::make($request->input("password"));
         $user->addresse = $request->input("addresse");
         $user->num_phone = $request->input("num_phone");
+
+        if ($request->hasFile('image')) {
+            // Récupérer le fichier image
+            $file = $request->file('image');
+            // Définir un nom unique pour l'image
+            $extension = $file->getClientOriginalExtension();
+            // Déplacer l'image vers le dossier de stockage
+            $filename = time() . "." . $extension;
+            // Mettre à jour le chemin de l'image dans la base de données
+            $file->move('profile/', $filename);
+            $user->image = $filename;
+        }
+
         $user->save();
         return $user;
     }
@@ -118,4 +131,25 @@ class userController extends Controller
 
         return response()->json(['message' => 'Statut du compte mis à jour avec succès'], 200);
     }
+
+
+    public function updateProfilePicture(Request $request, $id)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $user = User::findOrFail($id);
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->extension();
+            $image->move(public_path('img/profiles'), $imageName);
+            $user->profile_picture = 'img/profiles/' . $imageName;
+            $user->save();
+        }
+
+        return redirect()->back()->with('success', 'Photo de profil mise à jour avec succès.');
+    }
+
+
 }

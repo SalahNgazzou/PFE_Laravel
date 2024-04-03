@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        
-            Schema::create('list_images', function (Blueprint $table) {
-                $table->id();
-                $table->unsignedBigInteger('id_bien');
-                $table->string('src');
-                $table->timestamps();
-    
-                $table->foreign('id_bien')->references('id')->on('biens')->onDelete('cascade');
-            });
+        Schema::create('list_images', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('id_bien');
+            $table->string('src');
+            $table->timestamps();
+
+            $table->foreign('id_bien')->references('id')->on('biens')->onDelete('cascade');
+        });
     }
 
     /**

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('etat');
             $table->string('addresse');
             $table->string('ville');
-            $table->string('gouvernants');
+            $table->string('gouvernant')->nullable();
             $table->integer('prix');
             $table->integer('surface')->nullable();
             $table->integer('nbr_chombre')->nullable();
