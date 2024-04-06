@@ -41,13 +41,17 @@ Route::prefix('users')->group(function () {
     Route::delete('/{id}', [userController::class, 'destroy'])->middleware(['auth:api', 'scope:Admin']);
     Route::get('/{id}', [userController::class, 'getUser'])->middleware(['auth:api', 'scope:Admin']);
     Route::put('update/{id}', [UserController::class, 'update']);
-    Route::put('/{id}', [UserController::class, 'ChangeStatus'])->middleware(['auth:api', 'scope:Admin']);
+    Route::put('/{id}', [UserController::class, 'ChangeStatus']);
 });
 
 
-Route::prefix('coutiers')->group(function () {
-    Route::post('', [ajouterbiensController::class, 'add_Biens']);
+Route::prefix('biens')->group(function () {
+    Route::post('', [biensController::class, 'add_Biens']);
+    Route::put('', [biensController::class, 'edit_Biens']);
+    Route::get('', [biensController::class, 'listebiens']);
+    Route::get('/{id}', [biensController::class, 'getBiens']);
+    Route::get('getBiensParUtilisateur', [biensController::class, 'getBiensParUtilisateur']);
+    Route::put('/{id}', [biensController::class, 'ChangeAnnonce']);
 
 });
 
-Route::get('getbiens', [biensController::class, 'listebiens']);

@@ -126,30 +126,14 @@ class userController extends Controller
         $user = User::findOrFail($id);
 
         // Inversion du statut du compte
-        $user->statue = $user->statue === 'Active' ? 'Inactive' : 'Active';
+        $user->statue = $user->statue === 'Activer' ? 'Inactive' : 'Activer';
         $user->save();
 
         return response()->json(['message' => 'Statut du compte mis à jour avec succès'], 200);
     }
 
 
-    public function updateProfilePicture(Request $request, $id)
-    {
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        $user = User::findOrFail($id);
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->extension();
-            $image->move(public_path('img/profiles'), $imageName);
-            $user->profile_picture = 'img/profiles/' . $imageName;
-            $user->save();
-        }
-
-        return redirect()->back()->with('success', 'Photo de profil mise à jour avec succès.');
-    }
+   
 
 
 }

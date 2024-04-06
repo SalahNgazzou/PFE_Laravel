@@ -69,10 +69,6 @@ class Biens extends Model
         'heuteur',
         'condition_stockage',
         'id_user',
-        'user_name',
-        'user_lastName',
-        'user_email',
-        'user_phone',
         'propritair_name',
         'proritaire_phone',
     ];
@@ -80,5 +76,10 @@ class Biens extends Model
     public function liste_images()
     {
         return $this->hasMany(List_images::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class);
     }
 }

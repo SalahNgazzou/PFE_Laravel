@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $primaryKey = 'id';
     protected $fillable = [
         'name',
+        'last_name',
         'email',
         'role',
         'password',
@@ -40,5 +41,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
+    public function biens()
+    {
+        return $this->hasMany(Biens::class);
+    }
 }
