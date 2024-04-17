@@ -40,9 +40,19 @@ Route::prefix('users')->group(function () {
     Route::get('', [userController::class, 'liste'])->middleware(['auth:api', 'scope:Admin']);
     Route::delete('/{id}', [userController::class, 'destroy'])->middleware(['auth:api', 'scope:Admin']);
     Route::get('/{id}', [userController::class, 'getUser'])->middleware(['auth:api', 'scope:Admin']);
-    Route::put('/{id}', [UserController::class, 'update'])->middleware(['auth:api', 'scope:Admin']);
-    Route::put('/{id}', [UserController::class, 'ChangeStatus'])->middleware(['auth:api', 'scope:Admin']);
+    Route::put('update/{id}', [UserController::class, 'update']);
+    Route::put('/{id}', [UserController::class, 'ChangeStatus']);
 });
-Route::post('/biens/ajouter', [ajouterbiensController::class, 'AjouterBiens'])->name('biens.ajouter');
-Route::put('/biens/modifier/{id}', [modifierbiensController::class, 'ModifierBiens'])->name('biens.modifier');
-Route::get('getbiens', [biensController::class, 'listebiens']);
+
+
+Route::prefix('biens')->group(function () {
+    Route::post('', [biensController::class, 'add_Biens']);
+    Route::put('edit/{id}', [biensController::class, 'edit_Biens']);
+    Route::get('', [biensController::class, 'listebiens']);
+    Route::get('/{id}', [biensController::class, 'getBiens']);
+    Route::get('getBiensParUtilisateur', [biensController::class, 'getBiensParUtilisateur']);
+    Route::put('/{id}', [biensController::class, 'ChangeAnnonce']);
+    Route::post('add', [biensController::class, 'addImages']);
+    Route::delete('', [biensController::class, 'deleteImages']);
+});
+

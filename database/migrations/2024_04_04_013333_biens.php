@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('etat');
             $table->string('addresse');
             $table->string('ville');
-            $table->string('gouvernants');
+            $table->string('gouvernant')->nullable();
             $table->integer('prix');
             $table->integer('surface')->nullable();
             $table->integer('nbr_chombre')->nullable();
@@ -66,13 +66,10 @@ return new class extends Migration
             $table->double('capacité_stockage')->nullable();
             $table->double('heuteur')->nullable();
             $table->string('condition_stockage')->nullable();
-            $table->string('id_user');
-            $table->string('user_name');
-            $table->string('user_lastName');
-            $table->string('user_email');
-            $table->string('user_phone');
+            $table->unsignedBigInteger('id_user');
             $table->string('propritair_name');
             $table->string('proritaire_phone');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
