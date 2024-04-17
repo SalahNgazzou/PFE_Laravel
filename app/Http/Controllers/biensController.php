@@ -6,11 +6,13 @@ use App\Models\Biens;
 use App\Models\List_images;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class biensController extends Controller
 {
     function add_Biens(request $request)
     {
+
         $biens = new Biens();
         $biens->type_biens = $request->input("type_biens");
         $biens->description = $request->input('description');
@@ -118,7 +120,7 @@ class biensController extends Controller
                 break;
         }
 
-        $biens->id_user = $request->input("user_id");
+        $biens->id_user = $request->input("id_user");
         $biens->propritair_name = $request->input('propritair_name');
         $biens->proritaire_phone = $request->input('proritaire_phone');
         $biens->save();
@@ -139,9 +141,9 @@ class biensController extends Controller
             }
         }
         List_images::insert($imagesdata);
-        return  $biens;
-            
-       
+        return $biens;
+
+
     }
 
     function listebiens()
@@ -153,7 +155,7 @@ class biensController extends Controller
     function edit_Biens(request $request, $id)
     {
         $biens = Biens::find($id);
-        $biens->type_biens = $request->input("type_biens");
+
         $biens->description = $request->input('description');
         $biens->disponibilté = $request->input('disponibilté');
         $biens->categorie = $request->input('categorie');
@@ -259,64 +261,114 @@ class biensController extends Controller
                 break;
         }
 
-        $biens->id_user = $request->input("user_id");
+
         $biens->propritair_name = $request->input('propritair_name');
         $biens->proritaire_phone = $request->input('proritaire_phone');
         $biens->save();
 
-        // Enregistrer les images de la villa
+        /*  // Enregistrer les images de la villa
+         $imagesdata = [];
+         if ($files = $request->file('images')) {
+             foreach ($files as $key => $file) {
+                 // Store each image in the storage directory
+                 $extension = $file->getClientOriginalExtension();
+                 $filename = $key . '_' . time() . '.' . $extension;
+                 $path = "uploads/Biens/";
+
+                 $file->move($path, $filename);
+                 $imagesdata[] = [
+                     'id_bien' => $biens->id,
+                     'src' => $path . $filename,
+                 ];
+             }
+         }
+         List_images::insert($imagesdata); */
+        return [
+            'biens' => $biens,
+        ];
+    }
+    // function pour selection un biens aves ces images 
+    public function getBiens($id)
+    {
+        $images = DB::table('biens')->join('list_images', 'biens.id', '=', 'list_images.id_bien')
+            ->select('list_images.src')->where('biens.id', $id)
+            ->get();
+
+        $result = DB::table('biens')->where('biens.id', $id)
+            ->first();
+        $result->images = $images;
+
+        return $result;
+
+
+
+    }
+
+    // finction pour selection les biens de chaque user 
+
+    public function getBiensParUtilisateur()
+    {
+        // Récupérer tous les utilisateurs avec leurs biens
+        $utilisateurs = User::with('biens')->get();
+
+        // Retourner les utilisateurs avec leurs biens
+        return response()->json($utilisateurs);
+    }
+
+    public function ChangeAnnonce($id)
+    {
+        $biens = Biens::findOrFail($id);
+
+        // Inversion du statut du compte
+        $biens->annonce = $biens->annonce === 'Publier' ? 'Masquer' : 'Publier';
+        $biens->save();
+
+        return response()->json(['message' => 'Statut du compte mis à jour avec succès'], 200);
+    }
+
+    public function addImages(request $request)
+    {
+
         $imagesdata = [];
-        if ($files = $request->file('images')) {
+
+        $id_bien = $request->input('id_bien');
+        if ($files = $request->file('image')) {
             foreach ($files as $key => $file) {
                 // Store each image in the storage directory
                 $extension = $file->getClientOriginalExtension();
                 $filename = $key . '_' . time() . '.' . $extension;
                 $path = "uploads/Biens/";
+
                 $file->move($path, $filename);
                 $imagesdata[] = [
-                    'id_bien' => $biens->id,
+                    'id_bien' => $id_bien,
                     'src' => $path . $filename,
                 ];
             }
         }
         List_images::insert($imagesdata);
-        return [
-            'biens' => $biens,
-        ];
-    }
-// function pour selection un biens aves ces images 
-    public function getBiens($id)
-    {
-        $biens = Biens::where('id', $id)->get();
-
-        $images = List_images::where('id_bien', $id)
-        ->select('src')
-        ->get();
-        return   $biens;
-           
-     
     }
 
-// finction pour selection les biens de chaque user 
-
-public function getBiensParUtilisateur()
+    public function deleteImages(Request $request)
 {
-    // Récupérer tous les utilisateurs avec leurs biens
-    $utilisateurs = User::with('biens')->get();
+   
+    // Récupérer les IDs des images à supprimer depuis la requête
+    $ids = $request->input('ids');
 
-    // Retourner les utilisateurs avec leurs biens
-    return response()->json($utilisateurs);
-}
+    // Vérifier si des IDs ont été fournis
+    if (empty($ids)) {
+        return response()->json(['error' => 'Aucun ID fourni pour la suppression.'], 400);
+    }
 
-public function ChangeAnnonce($id)
-{
-    $biens = Biens::findOrFail($id);
+    // Supprimer les images correspondantes aux IDs fournis
+    $deletedCount = List_images::whereIn('id', $ids)->delete();
 
-    // Inversion du statut du compte
-    $biens->annonce = $biens->annonce === 'Publier' ? 'Masquer' : 'Publier';
-    $biens->save();
-
-    return response()->json(['message' => 'Statut du compte mis à jour avec succès'], 200);
+    // Vérifier si des images ont été supprimées
+    if ($deletedCount > 0) {
+        return response()->json(['message' => 'Images supprimées avec succès.']);
+    } else {
+        return response()->json(['error' => 'Aucune image trouvée avec les IDs fournis.'], 404);
+    }
 }
 
 }

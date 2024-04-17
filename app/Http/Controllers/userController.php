@@ -37,7 +37,7 @@ class userController extends Controller
 
         $user = User::where("email", $request->email)->first();
         // Check if the user exists and if the password matches
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$user || !Hash::check($request->password, $user->password) || $request->statue ==="Inctiver") {
             // If the user doesn't exist or the password doesn't match, return an error message
             return ["error" => "password or email is not matched"];
         }
@@ -92,9 +92,9 @@ class userController extends Controller
     {
         $user = User::find($id);
 
-     /*    if (!$user) {
+       if (!$user) {
             return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
-        } */
+        } 
         $user->name = $request->input("name");
         $user->last_name = $request->input("last_name");
         $user->cin = $request->input("cin");

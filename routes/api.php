@@ -47,11 +47,12 @@ Route::prefix('users')->group(function () {
 
 Route::prefix('biens')->group(function () {
     Route::post('', [biensController::class, 'add_Biens']);
-    Route::put('', [biensController::class, 'edit_Biens']);
+    Route::put('edit/{id}', [biensController::class, 'edit_Biens']);
     Route::get('', [biensController::class, 'listebiens']);
     Route::get('/{id}', [biensController::class, 'getBiens']);
     Route::get('getBiensParUtilisateur', [biensController::class, 'getBiensParUtilisateur']);
     Route::put('/{id}', [biensController::class, 'ChangeAnnonce']);
-
+    Route::post('add', [biensController::class, 'addImages']);
+    Route::delete('', [biensController::class, 'deleteImages']);
 });
 
