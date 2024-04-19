@@ -53,6 +53,6 @@ Route::prefix('biens')->group(function () {
     Route::get('getBiensParUtilisateur', [biensController::class, 'getBiensParUtilisateur']);
     Route::put('/{id}', [biensController::class, 'ChangeAnnonce']);
     Route::post('add', [biensController::class, 'addImages']);
-    Route::delete('', [biensController::class, 'deleteImages']);
+    Route::delete('/{ids}', [biensController::class, 'deleteImages']);
 });
 
