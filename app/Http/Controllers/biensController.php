@@ -291,7 +291,7 @@ class biensController extends Controller
     public function getBiens($id)
     {
         $images = DB::table('biens')->join('list_images', 'biens.id', '=', 'list_images.id_bien')
-            ->select('list_images.src')->where('biens.id', $id)
+            ->select('list_images.*')->where('biens.id', $id)
             ->get();
 
         $result = DB::table('biens')->where('biens.id', $id)
@@ -349,26 +349,25 @@ class biensController extends Controller
         List_images::insert($imagesdata);
     }
 
-    public function deleteImages(Request $request)
-{
-   
-    // Récupérer les IDs des images à supprimer depuis la requête
-    $ids = $request->input('ids');
+    public function deleteImages($ids)
+    {
 
-    // Vérifier si des IDs ont été fournis
-    if (empty($ids)) {
-        return response()->json(['error' => 'Aucun ID fourni pour la suppression.'], 400);
+        $idImages = array_map('intval', json_decode($ids, true));
+
+        // Vérifier si des IDs ont été fournis
+        if (empty($idImages)) {
+            return response()->json(['error' => 'Aucun ID fourni pour la suppression.'], 400);
+        }
+
+        // Supprimer les images correspondantes aux IDs fournis
+        $deletedCount = List_images::whereIn('id', $idImages)->delete();
+
+        // Vérifier si des images ont été supprimées
+        if ($deletedCount > 0) {
+            return response()->json(['message' => 'Images supprimées avec succès.']);
+        } else {
+            return response()->json(['error' => 'Aucune image trouvée avec les IDs fournis.'], 404);
+        }
     }
-
-    // Supprimer les images correspondantes aux IDs fournis
-    $deletedCount = List_images::whereIn('id', $ids)->delete();
-
-    // Vérifier si des images ont été supprimées
-    if ($deletedCount > 0) {
-        return response()->json(['message' => 'Images supprimées avec succès.']);
-    } else {
-        return response()->json(['error' => 'Aucune image trouvée avec les IDs fournis.'], 404);
-    }
-}
 
 }
