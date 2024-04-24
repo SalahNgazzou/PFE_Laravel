@@ -50,8 +50,9 @@ Route::prefix('biens')->group(function () {
     Route::put('edit/{id}', [biensController::class, 'edit_Biens']);
     Route::get('', [biensController::class, 'listebiens']);
     Route::get('/{id}', [biensController::class, 'getBiens']);
-    Route::get('getBiensParUtilisateur', [biensController::class, 'getBiensParUtilisateur']);
+    Route::get('BiensByUser/{id}', [biensController::class, 'listBiensByUser']);
     Route::put('/{id}', [biensController::class, 'ChangeAnnonce']);
+    Route::put('changestatue/{id}', [biensController::class, 'ChangeStatue']);
     Route::post('add', [biensController::class, 'addImages']);
     Route::delete('/{ids}', [biensController::class, 'deleteImages']);
 });

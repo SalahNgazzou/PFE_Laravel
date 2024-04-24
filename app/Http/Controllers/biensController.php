@@ -6,6 +6,7 @@ use App\Models\Biens;
 use App\Models\List_images;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class biensController extends Controller
@@ -151,6 +152,16 @@ class biensController extends Controller
         $bien = Biens::all();
         return $bien;
     }
+    public function listBiensByUser($id)
+    {
+        // Récupérez l'utilisateur authentifié
+
+
+        // Récupérez tous les biens ajoutés par cet utilisateur
+        $biens = Biens::where('id_user', $id)->get();
+
+        return $biens;
+    }
 
     function edit_Biens(request $request, $id)
     {
@@ -266,23 +277,6 @@ class biensController extends Controller
         $biens->proritaire_phone = $request->input('proritaire_phone');
         $biens->save();
 
-        /*  // Enregistrer les images de la villa
-         $imagesdata = [];
-         if ($files = $request->file('images')) {
-             foreach ($files as $key => $file) {
-                 // Store each image in the storage directory
-                 $extension = $file->getClientOriginalExtension();
-                 $filename = $key . '_' . time() . '.' . $extension;
-                 $path = "uploads/Biens/";
-
-                 $file->move($path, $filename);
-                 $imagesdata[] = [
-                     'id_bien' => $biens->id,
-                     'src' => $path . $filename,
-                 ];
-             }
-         }
-         List_images::insert($imagesdata); */
         return [
             'biens' => $biens,
         ];
@@ -304,16 +298,9 @@ class biensController extends Controller
 
     }
 
-    // finction pour selection les biens de chaque user 
 
-    public function getBiensParUtilisateur()
-    {
-        // Récupérer tous les utilisateurs avec leurs biens
-        $utilisateurs = User::with('biens')->get();
 
-        // Retourner les utilisateurs avec leurs biens
-        return response()->json($utilisateurs);
-    }
+
 
     public function ChangeAnnonce($id)
     {
@@ -321,6 +308,20 @@ class biensController extends Controller
 
         // Inversion du statut du compte
         $biens->annonce = $biens->annonce === 'Publier' ? 'Masquer' : 'Publier';
+        $biens->save();
+
+        return response()->json(['message' => 'Statut du compte mis à jour avec succès'], 200);
+    }
+    public function ChangeStatue($id)
+    {
+        $biens = Biens::findOrFail($id);
+        if ($biens->categorie === 'A louer') {
+            $biens->disponibilté = $biens->disponibilté === 'louée' ? 'En cours' : 'Louée';
+        } else {
+            $biens->disponibilté = $biens->disponibilté === 'Vendu' ? 'En cours' : 'Vendu';
+
+        }
+
         $biens->save();
 
         return response()->json(['message' => 'Statut du compte mis à jour avec succès'], 200);
