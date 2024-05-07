@@ -126,7 +126,7 @@ class userController extends Controller
         $user = User::findOrFail($id);
 
         // Inversion du statut du compte
-        $user->statue = $user->statue === 'Activer' ? 'Inactive' : 'Activer';
+        $user->statue = $user->statue === 'Activer' ? 'Déactiver' : 'Activer';
         $user->save();
 
         return response()->json(['message' => 'Statut du compte mis à jour avec succès'], 200);

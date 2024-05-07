@@ -19,6 +19,6 @@ class List_images extends Model
 
     public function biens()
     {
-        return $this->belongsTo(Biens::class);
+        return $this->belongsTo(Biens::class,'id_bien');
     }
 }
