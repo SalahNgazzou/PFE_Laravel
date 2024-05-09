@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Biens;
 use App\Models\Recherches;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BiController extends Controller
 {
@@ -16,9 +17,28 @@ class BiController extends Controller
         // Nombre de biens à louer
         $nombreDeBiensALouer = Biens::where('categorie', 'A Louer')->count();
 
+        // les types des biens plus vendre
+        $typeBiensPlusVendu = Biens::select('type_biens', DB::raw('COUNT(*) as count'))
+                            ->where('categorie', 'A vendre')
+                            ->groupBy('type_biens')
+                            ->get();
+        // les types des biens plus Louer
+        $typeBiensPlusLouer = Biens::select('type_biens', DB::raw('COUNT(*) as count'))
+                            ->where('categorie', 'A Louer')
+                            ->groupBy('type_biens')
+                            ->get();
+        // les categories des biens plus demande
+        $categoriesPlusDemande = Biens::select('categorie', DB::raw('COUNT(*) as count'))
+                               ->groupBy('categorie')
+                               ->orderByDesc('count')
+                               ->get();
+
         return response()->json([
             'nombre_de_biens_a_vendre' => $nombreDeBiensAVendre,
             'nombre_de_biens_a_louer' => $nombreDeBiensALouer,
+            'typeBiensPlusVendu' =>$typeBiensPlusVendu,
+            'typeBiensPlusLouer' =>$typeBiensPlusLouer ,
+            'categoriesPLusDemande' =>$categoriesPlusDemande,
         ]);
     }
 
