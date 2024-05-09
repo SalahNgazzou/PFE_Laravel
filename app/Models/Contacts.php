@@ -5,20 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class List_images extends Model
+class Contacts extends Model
 {
     use HasFactory;
 
-    protected $table = 'list_images';
-
+    protected $table = 'contacts';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id_bien',
-        'src',
+        'name',
+        'last_name',
+        'email',
+        'phone',
+        'adresse',
+        'message',
+        'etat',
     ];
-
-    public function biens()
-    {
-        return $this->belongsTo(Biens::class,'id_bien');
-    }
 }

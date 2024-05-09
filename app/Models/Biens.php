@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\User;
 class Biens extends Model
 {
     use HasFactory;
@@ -75,11 +75,11 @@ class Biens extends Model
 
     public function liste_images()
     {
-        return $this->hasMany(List_images::class);
+        return $this->hasMany(List_images::class,'id_bien');
     }
 
     public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'id_user');
     }
 }

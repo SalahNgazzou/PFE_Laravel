@@ -147,18 +147,41 @@ class biensController extends Controller
 
     }
 
-    function listebiens()
+    function biensEnattent()
     {
-        $bien = Biens::all();
-        return $bien;
+        $biens = Biens::where('annonce', 'Masquer')
+            ->get();
+        return $biens;
     }
-    public function listBiensByUser($id)
+    function biensPublier()
+    {
+        $biens = Biens::where('annonce', 'Publier')
+            ->where('disponibilté', 'En cours')
+            ->get();
+        return $biens;
+    }
+    public function listBiensByUserEnAttente($id)
     {
         // Récupérez l'utilisateur authentifié
 
 
         // Récupérez tous les biens ajoutés par cet utilisateur
-        $biens = Biens::where('id_user', $id)->get();
+        $biens = Biens::where('id_user', $id)
+            ->where('annonce', 'Masquer')
+            ->get();
+
+        return $biens;
+    }
+    public function listBiensByUserPublier($id)
+    {
+        // Récupérez l'utilisateur authentifié
+
+
+        // Récupérez tous les biens ajoutés par cet utilisateur
+        $biens = Biens::where('id_user', $id)
+            ->where('annonce', 'Publier')
+            ->where('disponibilté', 'En cours')
+            ->get();
 
         return $biens;
     }
@@ -230,7 +253,7 @@ class biensController extends Controller
                 $biens->usage_autorisé = $request->input('usage_autorisé');
                 $biens->service_public = $request->input('service_public');
                 $biens->accessibilité = $request->input('accessibilité');
-                $biens->service = $request->input('cloture');
+                $biens->cloture = $request->input('cloture');
                 $biens->titre_proprité = $request->input('titre_proprité');
                 break;
             case "Immeuble":
@@ -244,7 +267,7 @@ class biensController extends Controller
                 $biens->ascenceur = $request->input('ascenceur');
                 $biens->parking = $request->input('parking');
                 break;
-            case "Local Commercial ":
+            case "Local Commercial":
                 $biens->superficie = $request->input('superficie');
                 $biens->type_commerce_autorisé = $request->input('type_commerce_autorisé');
                 $biens->equipement = $request->input('equipement');
@@ -316,7 +339,7 @@ class biensController extends Controller
     {
         $biens = Biens::findOrFail($id);
         if ($biens->categorie === 'A louer') {
-            $biens->disponibilté = $biens->disponibilté === 'louée' ? 'En cours' : 'Louée';
+            $biens->disponibilté = $biens->disponibilté === 'Louée' ? 'En cours' : 'Louée';
         } else {
             $biens->disponibilté = $biens->disponibilté === 'Vendu' ? 'En cours' : 'Vendu';
 
