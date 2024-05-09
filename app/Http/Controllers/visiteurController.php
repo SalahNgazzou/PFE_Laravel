@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Biens;
+use App\Models\Contacts;
 use App\Models\Estimations;
+use App\Models\Recherches;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -47,6 +49,8 @@ class visiteurController extends Controller
         $biens = [];
         $biens = Biens::with('liste_images')
             ->with('users')
+            ->where('annonce','Publier')
+            ->where('disponibilté','En cours')
             ->get();
 
         return $biens;
@@ -101,6 +105,52 @@ class visiteurController extends Controller
         } else {
             // L'insertion a échoué, affiche un message d'erreur
             return Redirect::back()->with('error', 'Une erreur est survenue lors de l\'ajout de l\'estimation.');
+        }
+    }
+
+    public function add_demandeRecherche(Request $request)
+    {
+        $recherche = new Recherches();
+        $recherche->name = $request->input('name');
+        $recherche->last_name = $request->input('last_name');
+        $recherche->phone = $request->input('phone');
+        $recherche->email = $request->input('email');
+        $recherche->type = $request->input('type');
+        $recherche->categorie = $request->input('categorie');
+        $recherche->gouvernant = $request->input('gouvernant');
+        $recherche->ville = $request->input('ville');
+        $recherche->prix_min = $request->input('prix_min');
+        $recherche->prix_max = $request->input('prix_max');
+        $recherche->etat = $request->input('etat');
+        $recherche->save();
+        // Vérifie si l'insertion a réussi
+        if ($recherche->wasRecentlyCreated) {
+            // L'insertion a réussi, affiche un message de succès
+            return Redirect::back()->with('success', 'L\'recherche a été ajoutée avec succès.');
+        } else {
+            // L'insertion a échoué, affiche un message d'erreur
+            return Redirect::back()->with('error', 'Une erreur est survenue lors de l\'ajout de l\'recherche.');
+        }
+    }
+
+    public function add_contact(Request $request)
+    {
+        $contact = new Contacts();
+        $contact->name = $request->input('name');
+        $contact->last_name = $request->input('last_name');
+        $contact->email = $request->input('email');
+        $contact->phone = $request->input('phone');
+        $contact->adresse = $request->input('adresse');
+        $contact->message = $request->input('message');
+        $contact->etat = $request->input('etat');
+        $contact->save();
+        // Vérifie si l'insertion a réussi
+        if ($contact->wasRecentlyCreated) {
+            // L'insertion a réussi, affiche un message de succès
+            return Redirect::back()->with('success', 'message a été ajoutée avec succès.');
+        } else {
+            // L'insertion a échoué, affiche un message d'erreur
+            return Redirect::back()->with('error', 'Une erreur est survenue lors de l\'ajout de message.');
         }
     }
 

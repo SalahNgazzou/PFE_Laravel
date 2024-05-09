@@ -3,6 +3,7 @@
 use App\Http\Controllers\AjouterBiens;
 use App\Http\Controllers\ajouterbiensController;
 use App\Http\Controllers\AjouterController;
+use App\Http\Controllers\BiController;
 use App\Http\Controllers\biensController;
 use App\Http\Controllers\BiensConttroler\AppartementController;
 use App\Http\Controllers\BiensConttroler\DuplexController;
@@ -12,10 +13,12 @@ use App\Http\Controllers\BiensConttroler\Local_commercialController;
 use App\Http\Controllers\BiensConttroler\Parking_GarageController;
 use App\Http\Controllers\BiensConttroler\TerrainController;
 use App\Http\Controllers\BiensConttroler\UsineController;
+use App\Http\Controllers\contactController;
 use App\Http\Controllers\EstimationController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\ModifierBiens;
 use App\Http\Controllers\ModifierbiensController;
+use App\Http\Controllers\rechercheController;
 use App\Http\Controllers\VillaController;
 use App\Http\Controllers\visiteurController;
 use Illuminate\Http\Request;
@@ -64,6 +67,8 @@ Route::prefix('biens')->group(function () {
 Route::prefix('visiteur')->group(function () {
     Route::post('', [visiteurController::class, 'search']);
     Route::post('estimation', [visiteurController::class, 'add_estimation']);
+    Route::post('recherche', [visiteurController::class, 'add_demandeRecherche']);
+    Route::post('contact', [visiteurController::class, 'add_contact']);
     Route::get('random', [visiteurController::class, 'list_biens']);
     Route::get('/{id}', [visiteurController::class, 'getBiens']);
 });
@@ -73,4 +78,19 @@ Route::prefix('estimation')->group(function () {
     Route::put('/{id}', [EstimationController::class,'updateEstimationStatusToTerminated']);
     Route::delete('/{id}', [EstimationController::class,'deleteEstimationById']);
 });
+
+Route::prefix('recherche')->group(function () {
+    Route::get('', [rechercheController::class,'getDemandesRecherche']);
+    Route::get('/{id}', [rechercheController::class,'getDemandeRechercheById']);
+});
+Route::prefix('contact')->group(function () {
+    Route::get('', [contactController::class,'getContactEnAttente']);
+    Route::get('/{id}', [contactController::class,'getDemandeContactsById']);
+    Route::delete('/{id}', [contactController::class,'deleteContactById']);
+});
+Route::prefix('bi')->group(function () {
+    Route::get('', [BiController::class,'nombreDeBiens']);
+    Route::get('type_demander', [BiController::class,'BiensPlusDemander']);
+});
+
 Route::post('/send-email', [MailController::class,'send']);
