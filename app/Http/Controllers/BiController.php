@@ -7,8 +7,31 @@ use App\Models\Recherches;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+function convertData($data) {
+    // Initialize arrays to store labels and data
+    $labels = [];
+    $data = [];
+
+    // Populate arrays with data from the query result
+    foreach ($data as $item) {
+        $labels[] = $item->label;
+        $data[] = $item->count;
+    }
+
+    // Create an associative array to hold the labels and data
+    $result = [
+        'labels' => $labels,
+        'data' => $data
+    ];
+
+    return $result;
+    }
+
+    
 class BiController extends Controller
-{
+{  
+    
+   
     public function nombreDeBiens()
     {
         // Nombre de biens à vendre
@@ -18,17 +41,17 @@ class BiController extends Controller
         $nombreDeBiensALouer = Biens::where('categorie', 'A Louer')->count();
 
         // les types des biens plus vendre
-        $typeBiensPlusVendu = Biens::select('type_biens', DB::raw('COUNT(*) as count'))
+        $typeBiensPlusVendu = Biens::select('type_biens as label', DB::raw('COUNT(*) as count'))
                             ->where('categorie', 'A vendre')
                             ->groupBy('type_biens')
                             ->get();
         // les types des biens plus Louer
-        $typeBiensPlusLouer = Biens::select('type_biens', DB::raw('COUNT(*) as count'))
+        $typeBiensPlusLouer = Biens::select('type_biens as label', DB::raw('COUNT(*) as count'))
                             ->where('categorie', 'A Louer')
                             ->groupBy('type_biens')
                             ->get();
         // les categories des biens plus demande
-        $categoriesPlusDemande = Biens::select('categorie', DB::raw('COUNT(*) as count'))
+        $categoriesPlusDemande = Biens::select('categorie as label', DB::raw('COUNT(*) as count'))
                                ->groupBy('categorie')
                                ->orderByDesc('count')
                                ->get();
@@ -36,12 +59,12 @@ class BiController extends Controller
         return response()->json([
             'nombre_de_biens_a_vendre' => $nombreDeBiensAVendre,
             'nombre_de_biens_a_louer' => $nombreDeBiensALouer,
-            'typeBiensPlusVendu' =>$typeBiensPlusVendu,
-            'typeBiensPlusLouer' =>$typeBiensPlusLouer ,
-            'categoriesPLusDemande' =>$categoriesPlusDemande,
+            'typeBiensPlusVendu' =>convertData($typeBiensPlusVendu),
+            'typeBiensPlusLouer' =>convertData($typeBiensPlusLouer) ,
+            'categoriesPLusDemande' =>convertData($categoriesPlusDemande),
         ]);
     }
-
+  
     public function BiensPlusDemander()
     {
         // Nombre de biens à vendre
