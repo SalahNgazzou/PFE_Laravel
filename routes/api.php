@@ -13,6 +13,7 @@ use App\Http\Controllers\BiensConttroler\Local_commercialController;
 use App\Http\Controllers\BiensConttroler\Parking_GarageController;
 use App\Http\Controllers\BiensConttroler\TerrainController;
 use App\Http\Controllers\BiensConttroler\UsineController;
+use App\Http\Controllers\commentairController;
 use App\Http\Controllers\contactController;
 use App\Http\Controllers\EstimationController;
 use App\Http\Controllers\MailController;
@@ -57,6 +58,7 @@ Route::prefix('biens')->group(function () {
     Route::get('', [biensController::class, 'biensEnattent']);
     Route::get('publier', [biensController::class, 'biensPublier']);
     Route::get('/{id}', [biensController::class, 'getBiens']);
+   
     Route::get('BiensByUserEnAttente/{id}', [biensController::class, 'listBiensByUserEnAttente']);
     Route::get('BiensByUserPublier/{id}', [biensController::class, 'listBiensByUserPublier']);
     Route::put('/{id}', [biensController::class, 'ChangeAnnonce']);
@@ -68,6 +70,7 @@ Route::prefix('visiteur')->group(function () {
     Route::post('', [visiteurController::class, 'search']);
     Route::post('estimation', [visiteurController::class, 'add_estimation']);
     Route::post('recherche', [visiteurController::class, 'add_demandeRecherche']);
+    Route::post('commentair', [visiteurController::class, 'add_Commentaire']);
     Route::post('contact', [visiteurController::class, 'add_contact']);
     Route::get('random', [visiteurController::class, 'list_biens']);
     Route::get('/{id}', [visiteurController::class, 'getBiens']);
@@ -87,6 +90,11 @@ Route::prefix('contact')->group(function () {
     Route::get('', [contactController::class,'getContactEnAttente']);
     Route::get('/{id}', [contactController::class,'getDemandeContactsById']);
     Route::delete('/{id}', [contactController::class,'deleteContactById']);
+});
+Route::prefix('commentaire')->group(function () {
+    Route::get('', [commentairController::class,'getCommentairEnAttente']);
+    Route::get('/{id}', [commentairController::class,'CommentaireById']);
+    Route::get('bien/{id}', [commentairController::class, 'get_commentaire_bien']);
 });
 Route::prefix('bi')->group(function () {
     Route::get('', [BiController::class,'nombreDeBiens']);
