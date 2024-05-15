@@ -118,10 +118,9 @@ class userController extends Controller
             $user->birth = $request->input("birth");
             $user->email = $request->input("email");
             $user->role = $request->input("role");
-            $user->password = Hash::make($request->input("password"));
             $user->addresse = $request->input("addresse");
             $user->num_phone = $request->input("num_phone");
-            $destination = 'img/profiles';
+            $destination = 'uploads/profiles';
             if ($request->hasFile('image')) {
                 if ($user->image::exists($destination)) {
                     $user->image::delete($destination);
@@ -133,7 +132,7 @@ class userController extends Controller
                 // Déplacer l'image vers le dossier de stockage
                 $filename = time() . "." . $extension;
                 // Mettre à jour le chemin de l'image dans la base de données
-                $file->move('img/profiles', $filename);
+                $file->move('uploads/profiles', $filename);
                 $user->image = $filename;
             }
 

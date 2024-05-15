@@ -28,6 +28,7 @@ class AuthServiceProvider extends ServiceProvider
             'Secrétaire' => 'Secrétaire',
             'Courtier' => 'Courtier',
             'Admin' => 'Admin',
+            
         ]);
          Passport::personalAccessTokensExpireIn(Carbon::now()->addDays(1));
     }
