@@ -89,7 +89,14 @@ Route::prefix('commentaire')->group(function () {
 });
 Route::prefix('bi')->group(function () {
     Route::get('', [BiController::class,'nombreDeBiens'])->middleware(['auth:api', 'scope:Admin']);
+    Route::get('bien_encours', [BiController::class,'nombreBiensDisponibles'])->middleware(['auth:api', 'scope:Admin']);
+    Route::get('bien_Avendre', [BiController::class,'nombreBiensAvendre'])->middleware(['auth:api', 'scope:Admin']);
+    Route::get('bien_Alouer', [BiController::class,'nombreBiensAlouer'])->middleware(['auth:api', 'scope:Admin']);
     Route::get('type_demander', [BiController::class,'BiensPlusDemander'])->middleware(['auth:api', 'scope:Admin']);
+    Route::get('typesBiensLesPlusVendus', [BiController::class,'typesBiensLesPlusVendus']);
+    Route::get('typesBiensLesPluslouer', [BiController::class,'typesBiensLesPluslouer']);
+    Route::get('categorieDemander', [BiController::class,'categorieDemander']);
+
 });
 
 Route::post('/send-email', [MailController::class,'send']);
