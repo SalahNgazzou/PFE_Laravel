@@ -49,27 +49,33 @@ class userController extends Controller
             return $user;
         
     }
-        function login(Request $request)
-        {
-
-            $user = User::where("email", $request->email)->first();
-            // Check if the user exists and if the password matches
-            if (!$user || !Hash::check($request->password, $user->password) || $request->statue === "Désactiver") {
-                // If the user doesn't exist or the password doesn't match, return an error message
-                return ["error" => "password or email is not matched"];
-            }
-
-
-
-            // If the user exists and the password matches, generate an access token
-            $token = $user->createToken('Token name', [$user->role]);
-            // Return the user object along with the access token
-            return [
-                'user' => $user,
-                'access_token' => $token->accessToken,
-            ];
-
+    public function login(Request $request)
+    {
+        $user = User::where("email", $request->email)->first();
+    
+        // Check if the user exists and if the password matches
+        if (!$user) {
+            return response()->json(["error" => "User does not exist"], 401);
         }
+    
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json(["error" => "Incorrect password"], 401);
+        }
+    
+        if ($request->statue === "Désactiver") {
+            return response()->json(["error" => "Account is deactivated"], 403);
+        }
+    
+        // If the user exists and the password matches, generate an access token
+        $token = $user->createToken('Token name', [$user->role]);
+    
+        // Return the user object along with the access token
+        return response()->json([
+            'user' => $user,
+            'access_token' => $token->accessToken,
+        ], 200);
+    }
+    
         function liste()
         {
             $user = User::all();
