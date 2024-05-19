@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Biens;
+use App\Models\Commentaires;
 use App\Models\Contacts;
 use App\Models\Estimations;
 use App\Models\Recherches;
@@ -146,6 +147,27 @@ class visiteurController extends Controller
         $contact->save();
         // Vérifie si l'insertion a réussi
         if ($contact->wasRecentlyCreated) {
+            // L'insertion a réussi, affiche un message de succès
+            return Redirect::back()->with('success', 'message a été ajoutée avec succès.');
+        } else {
+            // L'insertion a échoué, affiche un message d'erreur
+            return Redirect::back()->with('error', 'Une erreur est survenue lors de l\'ajout de message.');
+        }
+    }
+
+    public function add_Commentaire(Request $request)
+    {
+        $commentaire = new Commentaires();
+        $commentaire->nom_prenom = $request->input('name');
+        $commentaire->telephone = $request->input('phone');
+        $commentaire->email = $request->input('email');
+        $commentaire->id_user = $request->input('id_user');
+        $commentaire->id_bien = $request->input('id_bien');
+        $commentaire->message = $request->input('message');
+        $commentaire->etat = $request->input('etat');
+        $commentaire->save();
+        // Vérifie si l'insertion a réussi
+        if ($commentaire->wasRecentlyCreated) {
             // L'insertion a réussi, affiche un message de succès
             return Redirect::back()->with('success', 'message a été ajoutée avec succès.');
         } else {

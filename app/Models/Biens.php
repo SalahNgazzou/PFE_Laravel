@@ -82,4 +82,8 @@ class Biens extends Model
     {
         return $this->belongsTo(User::class,'id_user');
     }
+    public function commentaire()
+    {
+        return $this->hasMany(Commentaires::class);
+    }
 }

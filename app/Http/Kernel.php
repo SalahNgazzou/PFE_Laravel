@@ -67,4 +67,10 @@ class Kernel extends HttpKernel
         'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
         'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
     ];
+
+    protected $routeMiddleware = [
+        // Autres middlewares...
+        'checkUserRole' => \App\Http\Middleware\CheckUserRole::class,
+        'CheckSecrétairCoutierRole'=> \App\Http\Middleware\CheckSecrétairCoutierRole::class,
+    ];
 }

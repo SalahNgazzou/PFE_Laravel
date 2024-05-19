@@ -23,4 +23,15 @@ class contactController extends Controller
     
         return false; // Si l'estimation avec l'ID donné n'est pas trouvée
     }
+    function updateContactStatusToTerminated($id) {
+        $contact = Contacts::find($id);
+    
+        if ($contact) {
+            $contact->etat = 'terminé';
+            $contact->save();
+            return true; // Si la mise à jour est réussie
+        }
+    
+        return false; // Si l'recherche avec l'ID donné n'est pas trouvée
+    }
 }

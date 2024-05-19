@@ -321,6 +321,8 @@ class biensController extends Controller
 
     }
 
+    
+    
 
 
 
