@@ -12,7 +12,9 @@ class commentairController extends Controller
         return Commentaires::where('etat', 'en attente')->get();
     }
     function CommentaireById($id) {
-        return Commentaires::where('id_user', $id)->get();
+        return Commentaires::where('id_user', $id)
+        ->where('etat', 'en attente')
+        ->get();
     }
     public function get_commentaire_bien($id)
     {
@@ -48,15 +50,17 @@ class commentairController extends Controller
     
         return false; // Si l'estimation avec l'ID donné n'est pas trouvée
     }
-    function updateCommentaireStatusToTerminated($id) {
+    public function updateCommentaireStatusToTerminated($id) {
         $comment = Commentaires::find($id);
     
         if ($comment) {
             $comment->etat = 'terminé';
             $comment->save();
-            return true; // Si la mise à jour est réussie
+            return response()->json(['success' => true], 200);
         }
     
-        return false; // Si l'recherche avec l'ID donné n'est pas trouvée
+        return response()->json(['error' => 'Commentaire non trouvé'], 404);
     }
+    
+    
 }

@@ -80,7 +80,7 @@ Route::prefix('contact')->group(function () {
     Route::put('/{id}', [contactController::class,'updateContactStatusToTerminated'])->middleware(['auth:api', 'scope:Secrétaire']);
     Route::delete('/{id}', [contactController::class,'deleteContactById'])->middleware(['auth:api', 'scope:Secrétaire']);
 });
-Route::prefix('commentaire')->group(function () {
+Route::prefix('commentaires')->group(function () {
     Route::get('', [commentairController::class,'getCommentairEnAttente'])->middleware(['auth:api', 'checkUserRole']);
     Route::get('/{id}', [commentairController::class,'CommentaireById'])->middleware(['auth:api', 'checkUserRole']);
     Route::get('bien/{id}', [commentairController::class, 'get_commentaire_bien'])->middleware(['auth:api', 'checkUserRole']);
