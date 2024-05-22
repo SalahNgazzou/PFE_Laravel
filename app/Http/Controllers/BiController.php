@@ -44,7 +44,9 @@ class BiController extends Controller
 
     public function nombreBiensDisponibles()
     {
-        $nombreBiensDisponibles = Biens::where('disponibilté', 'En cours')->count();
+        $nombreBiensDisponibles = Biens::where('disponibilté', 'En cours')
+        ->where('annonce', 'Publier')
+        ->count();
         return $nombreBiensDisponibles;
     }
 
@@ -52,6 +54,7 @@ class BiController extends Controller
     {
         $nombreBiensAvendre = Biens::where('disponibilté', 'En cours')
             ->where('categorie', 'A vendre ')
+            ->where('annonce', 'Publier')
             ->count();
         return $nombreBiensAvendre;
     }
@@ -60,6 +63,7 @@ class BiController extends Controller
     {
         $nombreBiensAlouer = Biens::where('disponibilté', 'En cours')
             ->where('categorie', 'A Louer ')
+            ->where('annonce', 'Publier')
             ->count();
         return $nombreBiensAlouer;
     }

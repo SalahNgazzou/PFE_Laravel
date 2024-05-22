@@ -93,7 +93,7 @@ class biensController extends Controller
                 $biens->ascenceur = $request->input('ascenceur');
                 $biens->parking = $request->input('parking');
                 break;
-            case "Local Commercial ":
+            case "Local Commercial":
                 $biens->superficie = $request->input('superficie');
                 $biens->type_commerce_autorisé = $request->input('type_commerce_autorisé');
                 $biens->equipement = $request->input('equipement');
